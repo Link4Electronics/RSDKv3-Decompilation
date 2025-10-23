@@ -1,5 +1,8 @@
 #include "RetroEngine.hpp"
 #include <string>
+#if defined(__linux__) || defined(__FreeBSD__)
+#include <endian.h>
+#endif
 
 int currentVideoFrame = 0;
 int videoFrameCount   = 0;
@@ -257,7 +260,11 @@ int ProcessVideo()
 
 #if RETRO_USING_OPENGL
                 glBindTexture(GL_TEXTURE_2D, videoBuffer);
+#if defined(__BYTE_ORDER__) && (__BYTE_ORDER == __BIG_ENDIAN)
+                glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, videoVidData->width, videoVidData->height, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8_REV, videoVidData->pixels);
+#else
                 glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, videoVidData->width, videoVidData->height, GL_RGBA, GL_UNSIGNED_BYTE, videoVidData->pixels);
+#endif
                 glBindTexture(GL_TEXTURE_2D, 0);
 #elif RETRO_USING_SDL2
                 int half_w     = videoVidData->width / 2;
@@ -318,8 +325,13 @@ void SetupVideoBuffer(int width, int height)
     glGenTextures(1, &videoBuffer);
     glBindTexture(GL_TEXTURE_2D, videoBuffer);
 
+#if defined(__BYTE_ORDER__) && (__BYTE_ORDER == __BIG_ENDIAN)
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8_REV, NULL);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, videoVidData->width, videoVidData->height, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8_REV, videoVidData->pixels);
+#else
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
     glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, videoVidData->width, videoVidData->height, GL_RGBA, GL_UNSIGNED_BYTE, videoVidData->pixels);
+#endif
 
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
