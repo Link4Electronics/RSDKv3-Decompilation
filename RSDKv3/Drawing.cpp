@@ -332,11 +332,7 @@ int InitRenderDevice()
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, Engine.scalingMode ? GL_LINEAR : GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, Engine.scalingMode ? GL_LINEAR : GL_NEAREST);
-#if defined(__BYTE_ORDER__) && (__BYTE_ORDER == __BIG_ENDIAN)
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, SCREEN_XSIZE, SCREEN_YSIZE, 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8_REV, 0);
-#else
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, SCREEN_XSIZE, SCREEN_YSIZE, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-#endif
 
     glGenTextures(1, &retroBuffer2x);
     glBindTexture(GL_TEXTURE_2D, retroBuffer2x);
@@ -344,11 +340,7 @@ int InitRenderDevice()
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, Engine.scalingMode ? GL_LINEAR : GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, Engine.scalingMode ? GL_LINEAR : GL_NEAREST);
-#if defined(__BYTE_ORDER__) && (__BYTE_ORDER == __BIG_ENDIAN)
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, SCREEN_XSIZE * 2, SCREEN_YSIZE * 2, 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8_REV, 0);
-#else
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, SCREEN_XSIZE * 2, SCREEN_YSIZE * 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-#endif
 
     for (int c = 0; c < 0x10000; ++c) {
         int r               = (c & 0b1111100000000000) >> 8;
@@ -934,11 +926,7 @@ void RenderFromRetroBuffer()
             framebufferPtr += 2 * (GFX_LINESIZE - SCREEN_XSIZE);
         }
 
-#if defined(__BYTE_ORDER__) && (__BYTE_ORDER == __BIG_ENDIAN)
-        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, SCREEN_XSIZE * 2, SCREEN_YSIZE * 2, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8_REV, Engine.texBuffer2x);
-#else
         glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, SCREEN_XSIZE * 2, SCREEN_YSIZE * 2, GL_RGBA, GL_UNSIGNED_BYTE, Engine.texBuffer2x);
-#endif
     }
 
     glLoadIdentity();
@@ -1388,11 +1376,7 @@ void SetScreenDimensions(int width, int height, int winWidth, int winHeight)
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, Engine.scalingMode ? GL_LINEAR : GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, Engine.scalingMode ? GL_LINEAR : GL_NEAREST);
-#if defined(__BYTE_ORDER__) && (__BYTE_ORDER == __BIG_ENDIAN)
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, SCREEN_XSIZE, SCREEN_YSIZE, 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8_REV, 0);
-#else
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, SCREEN_XSIZE, SCREEN_YSIZE, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-#endif
 
     glGenTextures(1, &retroBuffer2x);
     glBindTexture(GL_TEXTURE_2D, retroBuffer2x);
@@ -1400,11 +1384,7 @@ void SetScreenDimensions(int width, int height, int winWidth, int winHeight)
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, Engine.scalingMode ? GL_LINEAR : GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, Engine.scalingMode ? GL_LINEAR : GL_NEAREST);
-#if defined(__BYTE_ORDER__) && (__BYTE_ORDER == __BIG_ENDIAN)
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, SCREEN_XSIZE * 2, SCREEN_YSIZE * 2, 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8_REV, 0);
-#else
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, SCREEN_XSIZE * 2, SCREEN_YSIZE * 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-#endif
 #endif
 
     int widthFix = 1;
