@@ -926,7 +926,11 @@ void RenderFromRetroBuffer()
             framebufferPtr += 2 * (GFX_LINESIZE - SCREEN_XSIZE);
         }
 
+#if defined(__BYTE_ORDER__) && (__BYTE_ORDER == __BIG_ENDIAN)
+        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, SCREEN_XSIZE * 2, SCREEN_YSIZE * 2, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8_REV, Engine.texBuffer2x);
+#else
         glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, SCREEN_XSIZE * 2, SCREEN_YSIZE * 2, GL_RGBA, GL_UNSIGNED_BYTE, Engine.texBuffer2x);
+#endif
     }
 
     glLoadIdentity();
