@@ -11,7 +11,7 @@ on:
       - CMakeLists.txt
     branches:
       - master
-  workflow_dispatch:
+  workflow_dispatch: {}
 env:
   GENERAL_FLAGS: "-DRETRO_DISABLE_PLUS=ON -DCMAKE_BUILD_TYPE=Release"
   # Normally you would use $VCPKG_INSTALLATION_PATH, but it's broken...so hardcode C:/vcpkg
