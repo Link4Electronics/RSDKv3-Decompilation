@@ -156,12 +156,12 @@ jobs:
     runs-on: ${{ matrix.runs-on }}
     container:
       image: ghcr.io/pkgforge-dev/archlinux:latest
+      options: --user root
     steps:
       - name: Code Checkout
         uses: actions/checkout@v6
         with:
           submodules: recursive
-        options: --user root
       - name: Preparing Container
         uses: pkgforge-dev/anylinux-setup-action@v2
       - name: Install Dependencies
