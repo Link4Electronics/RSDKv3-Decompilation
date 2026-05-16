@@ -239,6 +239,7 @@ jobs:
           with:
             name: release-mac
             path: build/Applications/RSDKv3.zip
+  
   publish-release:
     name: Release
     needs: [v3-windows, v3-windows-x64, v3-linux, v3-linux-anylinux, v3-macos, v3-android]
