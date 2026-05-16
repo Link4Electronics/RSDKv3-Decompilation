@@ -275,7 +275,6 @@ jobs:
           draft: false
           prerelease: true
           generate_release_notes: true
-          # Explicitly target specific file formats to block hidden metadata assets
           files: |
             ./assets-to-release/**/*.zip
             ./assets-to-release/**/*.AppImage
