@@ -179,7 +179,9 @@ jobs:
           # Structure the target AppDir
           mkdir -p ./AppDir/usr/bin
           mv -v build/RSDKv3 ./AppDir/usr/bin/
-          # Setup dynamic version string safely 
+          cp -v "dependencies/mac/Assets.xcassets/AppIcon.appiconset/RSDKv3 Decomp Icon-256.png" ./AppDir/RSDKv3.png
+          cp -v flatpak/com.sega.SonicCD.desktop ./AppDir
+          # Setup dynamic version string safely
           # Modified fallback mechanism in case git description tags aren't populated locally
           VERSION=$(git describe --tags --always 2>/dev/null || echo "master-${GITHUB_SHA:0:7}")
           
