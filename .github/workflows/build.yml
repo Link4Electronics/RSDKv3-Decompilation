@@ -146,8 +146,16 @@ jobs:
     runs-on: ${{ matrix.runs-on }}
     container: ghcr.io/pkgforge-dev/archlinux:latest
     steps:
+      # Install git and set safe directory before checkout runs
+      - name: Initialize Container Git Environment
+        run: |
+          pacman -Syu --noconfirm git
+          git config --global --add safe.directory "${GITHUB_WORKSPACE}"
+
       - name: Code Checkout
         uses: actions/checkout@v6
+        with:
+          submodules: recursive
       - name: Preparing Container
         uses: pkgforge-dev/anylinux-setup-action@v2
       - name: Install Dependencies
