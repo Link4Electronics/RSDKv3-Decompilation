@@ -246,7 +246,7 @@ jobs:
   publish-release:
     name: Create GitHub Release
     # Wait for ALL compilation jobs to complete successfully
-    needs: [v3-windows, v3-linux, v3-linux-anylinux, v3-macos, v3-android]
+    needs: [v3-windows, v3-windows-x64, v3-linux, v3-linux-anylinux, v3-macos, v3-android]
     runs-on: ubuntu-latest
     permissions:
       contents: write
