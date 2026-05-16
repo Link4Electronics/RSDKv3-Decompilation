@@ -154,12 +154,14 @@ jobs:
           - arch: aarch64
             runs-on: ubuntu-24.04-arm
     runs-on: ${{ matrix.runs-on }}
-    # Remove the global job-level container directive here
+    container:
+      image: ghcr.io/pkgforge-dev/archlinux:latest
     steps:
       - name: Code Checkout
         uses: actions/checkout@v6
         with:
           submodules: recursive
+        options: --user root
       - name: Preparing Container
         uses: pkgforge-dev/anylinux-setup-action@v2
       - name: Install Dependencies
