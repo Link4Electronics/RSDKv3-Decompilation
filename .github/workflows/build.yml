@@ -144,6 +144,66 @@ jobs:
         with:
           name: v3-linux
           path: linux.tar.gz
+  v3-linux-anylinux:
+    name: Build Linux AppImage (${{ matrix.arch }})
+    strategy:
+      matrix:
+        include:
+          - arch: x86_64
+            runs-on: ubuntu-latest
+          - arch: aarch64
+            runs-on: ubuntu-24.04-arm
+    runs-on: ${{ matrix.runs-on }}
+    container: ghcr.io/pkgforge-dev/archlinux:latest
+    steps:
+      - name: Code Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Preparing Container
+        uses: pkgforge-dev/anylinux-setup-action@v2
+      - name: Install Dependencies
+        run: |
+          # Use noninteractive flag to prevent pacman configuration hangs
+          pacman -Syu --noconfirm cmake glew sdl2 libdecor libtheora
+          echo "Installing debloated packages..."
+          echo "---------------------------------------------------------------"
+          get-debloated-pkgs --add-common --prefer-nano
+      - name: Build and Package AppImage
+        env:
+          # Explicitly map global env context so they can pass into the container environment
+          GENERAL_FLAGS: ${{ env.GENERAL_FLAGS }}
+          GENERAL_LINUX_FLAGS: ${{ env.GENERAL_LINUX_FLAGS }}
+          TARGET_ARCH: ${{ matrix.arch }}
+        run: |
+          # Compile application using global repository flags
+          cmake -B build ${GENERAL_FLAGS} ${GENERAL_LINUX_FLAGS}
+          cmake --build build --parallel
+          # Structure the target AppDir
+          mkdir -p ./AppDir/usr/bin
+          mv -v build/RSDKv3 ./AppDir/usr/bin/
+          # Setup dynamic version string safely 
+          # Modified fallback mechanism in case git description tags aren't populated locally
+          VERSION=$(git describe --tags --always 2>/dev/null || echo "master-${GITHUB_SHA:0:7}")
+          
+          # Set quick-sharun variables
+          export ARCH="${TARGET_ARCH}"
+          export VERSION
+          export OUTPATH="${GITHUB_WORKSPACE}/dist"
+          export ADD_HOOKS="self-updater.hook"
+          export UPINFO="gh-releases-zsync|${GITHUB_REPOSITORY%/*}|${GITHUB_REPOSITORY#*/}|latest|*${ARCH}.AppImage.zsync"
+          export DEPLOY_OPENGL=1
+          # Create destination container directory for AppImage binary extraction
+          mkdir -p "${OUTPATH}"
+          # Deploy dependencies
+          quick-sharun ./AppDir/usr/bin/RSDKv3
+          # Turn AppDir into AppImage
+          quick-sharun --make-appimage
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: v3-linux-appimage-${{ matrix.arch }}
+          path: dist/
   v3-macOS:
       runs-on: macos-latest
       steps:
