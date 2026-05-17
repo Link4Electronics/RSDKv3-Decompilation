@@ -198,7 +198,6 @@ jobs:
           export ARCH="${TARGET_ARCH}"
           export VERSION
           export OUTPATH="${GITHUB_WORKSPACE}/dist"
-          export ADD_HOOKS="self-updater.hook"
           export UPINFO="gh-releases-zsync|${GITHUB_REPOSITORY%/*}|${GITHUB_REPOSITORY#*/}|latest|*${ARCH}.AppImage.zsync"
           export DEPLOY_OPENGL=1
           # Create destination container directory for AppImage binary extraction
